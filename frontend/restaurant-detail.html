@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Details - FoodHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#903C1F',
+                        secondary: '#000000',
+                        light: '#FFFFFF'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .swiper {
+            width: 100%;
+            height: 400px;
+        }
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .booking-time-slot {
+            @apply px-4 py-2 rounded-lg border border-gray-300 cursor-pointer transition-all;
+        }
+        .booking-time-slot.selected {
+            @apply bg-primary text-white border-primary;
+        }
+        .booking-time-slot:hover:not(.selected) {
+            @apply border-primary text-primary;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="index.html" class="text-2xl font-bold text-primary hover:text-secondary transition duration-300">FoodHub</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="hidden md:ml-6 md:flex md:space-x-8" id="nav-links">
+                        <!-- Links will be added by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Restaurant Details -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div id="restaurantDetail" class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- Content will be populated by JavaScript -->
+        </div>
+
+        <!-- Booking Modal -->
+        <div id="bookingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+            <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-900">Book a Table</h3>
+                    <button onclick="closeBookingModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="bookingForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Date</label>
+                        <input type="date" id="bookingDate" required min="" 
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Number of People</label>
+                        <select id="bookingPeople" required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+                            <option value="">Select number of people</option>
+                            <option value="1">1 person</option>
+                            <option value="2">2 people</option>
+                            <option value="3">3 people</option>
+                            <option value="4">4 people</option>
+                            <option value="5">5 people</option>
+                            <option value="6">6 people</option>
+                            <option value="7">7 people</option>
+                            <option value="8">8 people</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Available Time Slots</label>
+                        <div class="grid grid-cols-3 gap-2" id="timeSlots">
+                            <!-- Time slots will be added here -->
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Special Requests</label>
+                        <textarea id="bookingNotes" rows="3" 
+                                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                                  placeholder="Any special requests or preferences?"></textarea>
+                    </div>
+                    <button type="submit" 
+                            class="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition-colors">
+                        Confirm Booking
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        document.addEventListener('DOMContentLoaded', function() {
+            const userId = localStorage.getItem('user_id');
+            const email = localStorage.getItem('email');
+            
+            if (!userId || !email) {
+                window.location.href = 'login.html';
+                return;
+            }
+        });
+
+        // Update navigation
+        const navLinks = document.getElementById('nav-links');
+        navLinks.innerHTML = `
+            <a href="index.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">Home</a>
+            <a href="about.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">About</a>
+            <a href="add-restaurant.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">Add Restaurant</a>
+            <a href="my-restaurants.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">My Restaurants</a>
+            <button onclick="logout()" class="ml-4 px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded-md text-sm font-medium transition duration-300">Logout</button>
+        `;
+
+        // Get restaurant ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const restaurantId = urlParams.get('id');
+
+        // Fetch restaurant details
+        async function fetchRestaurantDetails() {
+            try {
+                const response = await fetch(`../backend/get_restaurant.php?id=${restaurantId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch restaurant details');
+                }
+
+                const data = await response.json();
+                if (data.status === 'error') {
+                    throw new Error(data.message || 'Failed to fetch restaurant details');
+                }
+
+                if (!data.restaurant) {
+                    throw new Error('Restaurant not found');
+                }
+
+                displayRestaurantDetails(data.restaurant);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('restaurantDetail').innerHTML = `
+                    <div class="p-8 text-center">
+                        <p class="text-red-500 text-lg">${error.message || 'Error loading restaurant details. Please try again later.'}</p>
+                        <a href="index.html" class="mt-4 inline-block px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                            Return to Homepage
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        function displayRestaurantDetails(restaurant) {
+            const detailContainer = document.getElementById('restaurantDetail');
+            
+            // Prepare photos for slider
+            const allPhotos = [];
+            if (restaurant.photos && restaurant.photos.length > 0) {
+                // Add primary photo first
+                const primaryPhoto = restaurant.photos.find(photo => photo.is_primary === "1" || photo.is_primary === true);
+                if (primaryPhoto) {
+                    allPhotos.push(primaryPhoto);
+                }
+                // Add other photos
+                restaurant.photos
+                    .filter(photo => photo.is_primary !== "1" && photo.is_primary !== true)
+                    .forEach(photo => allPhotos.push(photo));
+            }
+            
+            const defaultImage = 'assets/images/default-restaurant.jpg';
+            
+            detailContainer.innerHTML = `
+                <!-- Photo Slider -->
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        ${allPhotos.length > 0 ? 
+                            allPhotos.map(photo => `
+                                <div class="swiper-slide">
+                                    <img src="../${photo.photo_url}" alt="${restaurant.name}" class="w-full h-full object-cover">
+                                </div>
+                            `).join('') :
+                            `<div class="swiper-slide">
+                                <img src="${defaultImage}" alt="${restaurant.name}" class="w-full h-full object-cover">
+                            </div>`
+                        }
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+
+                <div class="p-6 md:p-8">
+                    <div class="max-w-4xl mx-auto">
+                        <!-- Restaurant Header -->
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                            <div>
+                                <h1 class="text-3xl font-bold text-gray-900 mb-2">${restaurant.name}</h1>
+                                <p class="text-lg text-primary font-medium">${restaurant.cuisine_type}</p>
+                            </div>
+                            <button onclick="openBookingModal()"
+                                    class="mt-4 md:mt-0 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                Book a Table
+                            </button>
+                        </div>
+
+                        <!-- Rating and Quick Info -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                            <div class="flex items-center space-x-2">
+                                <div class="flex text-yellow-400">
+                                    ${generateStarRating(restaurant.rating)}
+                                </div>
+                                <span class="text-gray-600 font-medium">${restaurant.rating.toFixed(1)}</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-clock w-6"></i>
+                                <span class="ml-2">Open: 11:00 AM - 10:00 PM</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-utensils w-6"></i>
+                                <span class="ml-2">Table booking available</span>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="prose max-w-none mb-8">
+                            <h2 class="text-xl font-semibold text-gray-900 mb-3">About ${restaurant.name}</h2>
+                            <p class="text-gray-600">${restaurant.description}</p>
+                        </div>
+
+                        <!-- Contact and Location -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-4">
+                                <h2 class="text-xl font-semibold text-gray-900">Location & Contact</h2>
+                                <div class="space-y-3">
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fas fa-map-marker-alt w-6"></i>
+                                        <span class="ml-2">${restaurant.address}</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fas fa-phone w-6"></i>
+                                        <span class="ml-2">${restaurant.contact_number}</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fas fa-user w-6"></i>
+                                        <span class="ml-2">Added by ${restaurant.owner_name}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h2 class="text-xl font-semibold text-gray-900">Features</h2>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fas fa-wifi w-6"></i>
+                                        <span class="ml-2">Free WiFi</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fas fa-parking w-6"></i>
+                                        <span class="ml-2">Parking Available</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fas fa-credit-card w-6"></i>
+                                        <span class="ml-2">Card Payment</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fas fa-wheelchair w-6"></i>
+                                        <span class="ml-2">Wheelchair Accessible</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Initialize Swiper
+            new Swiper('.swiper', {
+                loop: true,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+        }
+
+        function generateStarRating(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<i class="fas fa-star"></i>';
+                } else if (i - 0.5 <= rating) {
+                    stars += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    stars += '<i class="far fa-star"></i>';
+                }
+            }
+            return stars;
+        }
+
+        // Booking Modal Functions
+        function openBookingModal() {
+            const modal = document.getElementById('bookingModal');
+            modal.classList.remove('hidden');
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookingDate').min = today;
+            
+            // Generate time slots
+            generateTimeSlots();
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+        }
+
+        function generateTimeSlots() {
+            const timeSlotsContainer = document.getElementById('timeSlots');
+            const timeSlots = [
+                '11:00', '11:30', '12:00', '12:30', '13:00', '13:30',
+                '14:00', '14:30', '15:00', '15:30', '16:00', '16:30',
+                '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
+            ];
+            
+            timeSlotsContainer.innerHTML = timeSlots.map(time => `
+                <div class="booking-time-slot" onclick="selectTimeSlot(this)" data-time="${time}">
+                    ${time}
+                </div>
+            `).join('');
+        }
+
+        function selectTimeSlot(element) {
+            // Remove selection from other slots
+            document.querySelectorAll('.booking-time-slot').forEach(slot => {
+                slot.classList.remove('selected');
+            });
+            // Add selection to clicked slot
+            element.classList.add('selected');
+        }
+
+        // Handle booking form submission
+        document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const selectedTimeSlot = document.querySelector('.booking-time-slot.selected');
+            if (!selectedTimeSlot) {
+                alert('Please select a time slot');
+                return;
+            }
+
+            const bookingData = {
+                restaurant_id: restaurantId,
+                user_id: localStorage.getItem('user_id'),
+                date: document.getElementById('bookingDate').value,
+                time: selectedTimeSlot.dataset.time,
+                people: document.getElementById('bookingPeople').value,
+                notes: document.getElementById('bookingNotes').value
+            };
+
+            try {
+                const response = await fetch('../backend/book_table.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bookingData)
+                });
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    alert('Booking confirmed successfully!');
+                    closeBookingModal();
+                } else {
+                    alert(data.message || 'Failed to make booking. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to make booking. Please try again.');
+            }
+        });
+
+        // Logout function
+        async function logout() {
+            try {
+                await fetch('../backend/logout.php', {
+                    method: 'POST'
+                });
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('email');
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Initial load
+        fetchRestaurantDetails();
+    </script>
+</body>
+</html> 

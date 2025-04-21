@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - FoodHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#903C1F',
+                        secondary: '#000000',
+                        light: '#FFFFFF'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-light">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userId = localStorage.getItem('user_id');
+            const email = localStorage.getItem('email');
+            
+            if (!userId || !email) {
+                window.location.href = 'login.html';
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('email');
+            localStorage.removeItem('full_name');
+            window.location.href = 'login.html';
+        }
+    </script>
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="index.html" class="text-2xl font-bold text-primary hover:text-secondary transition duration-300">FoodHub</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="hidden md:ml-6 md:flex md:space-x-8" id="nav-links">
+                        <a href="index.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">Home</a>
+                        <a href="about.html" class="border-primary text-secondary hover:text-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">About</a>
+                        <a href="add-restaurant.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">Add Restaurant</a>
+                        <a href="my-restaurants.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">My Restaurants</a>
+                        <button onclick="logout()" class="ml-4 px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded-md text-sm font-medium transition duration-300">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
+        <div class="bg-white rounded-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
+            <div class="relative">
+                <div class="absolute inset-0">
+                    <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Restaurant interior">
+                    <div class="absolute inset-0 bg-primary mix-blend-multiply opacity-90"></div>
+                </div>
+                <div class="relative py-32 px-6 sm:py-40 sm:px-12">
+                    <h1 class="text-4xl font-extrabold tracking-tight text-light sm:text-5xl lg:text-6xl">About Us</h1>
+                    <p class="mt-6 max-w-3xl text-xl text-light/90">
+                        Discover the best local restaurants and share your dining experiences with others.
+                    </p>
+                </div>
+            </div>
+            <div class="px-6 py-16 sm:px-12">
+                <div class="mb-16">
+                    <h2 class="text-3xl font-bold text-secondary mb-6">Our Mission</h2>
+                    <p class="text-lg text-gray-600 leading-relaxed">
+                        FoodHub is dedicated to connecting food lovers with great local restaurants. We believe that every neighborhood has hidden gems waiting to be discovered, and we're here to help you find them.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+                    <div class="text-center transform transition-all duration-300 hover:scale-105">
+                        <div class="w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
+                            <i class="fas fa-search text-2xl text-primary"></i>
+                        </div>
+                        <h3 class="mt-6 text-xl font-semibold text-secondary">Discover</h3>
+                        <p class="mt-3 text-gray-600">Find new restaurants in your area with detailed information and ratings.</p>
+                    </div>
+                    <div class="text-center transform transition-all duration-300 hover:scale-105">
+                        <div class="w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
+                            <i class="fas fa-star text-2xl text-primary"></i>
+                        </div>
+                        <h3 class="mt-6 text-xl font-semibold text-secondary">Rate & Review</h3>
+                        <p class="mt-3 text-gray-600">Share your experiences and help others find great places to eat.</p>
+                    </div>
+                    <div class="text-center transform transition-all duration-300 hover:scale-105">
+                        <div class="w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
+                            <i class="fas fa-utensils text-2xl text-primary"></i>
+                        </div>
+                        <h3 class="mt-6 text-xl font-semibold text-secondary">Add Restaurants</h3>
+                        <p class="mt-3 text-gray-600">Own a restaurant? Add your establishment to our directory.</p>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-secondary mb-8">How It Works</h2>
+                    <div class="space-y-8">
+                        <div class="flex items-start transform transition-all duration-300 hover:translate-x-2">
+                            <div class="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-light font-bold text-xl">1</div>
+                            <div class="ml-6">
+                                <h3 class="text-xl font-semibold text-secondary">Create an Account</h3>
+                                <p class="mt-2 text-gray-600 leading-relaxed">Sign up for free to access all features of FoodHub.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start transform transition-all duration-300 hover:translate-x-2">
+                            <div class="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-light font-bold text-xl">2</div>
+                            <div class="ml-6">
+                                <h3 class="text-xl font-semibold text-secondary">Explore Restaurants</h3>
+                                <p class="mt-2 text-gray-600 leading-relaxed">Browse through our curated list of local restaurants.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start transform transition-all duration-300 hover:translate-x-2">
+                            <div class="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-light font-bold text-xl">3</div>
+                            <div class="ml-6">
+                                <h3 class="text-xl font-semibold text-secondary">Share Your Experience</h3>
+                                <p class="mt-2 text-gray-600 leading-relaxed">Add restaurants, rate them, and help build our community.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

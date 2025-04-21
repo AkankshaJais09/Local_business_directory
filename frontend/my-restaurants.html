@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Restaurants - FoodHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#903C1F',
+                        secondary: '#000000',
+                        light: '#FFFFFF'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-light">
+    <!-- Authentication Check -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userId = localStorage.getItem('user_id');
+            const email = localStorage.getItem('email');
+            
+            if (!userId || !email) {
+                window.location.href = 'login.html';
+                return; // Stop further execution if not logged in
+            }
+            
+            // Fetch restaurants for the logged-in user
+            fetchMyRestaurants(userId);
+        });
+
+        function logout() {
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('email');
+            localStorage.removeItem('full_name');
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="index.html" class="text-2xl font-bold text-primary hover:text-secondary transition duration-300">FoodHub</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="hidden md:ml-6 md:flex md:space-x-8" id="nav-links">
+                        <a href="index.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">Home</a>
+                        <a href="about.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">About</a>
+                        <a href="add-restaurant.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">Add Restaurant</a>
+                        <a href="my-restaurants.html" class="border-primary text-secondary hover:text-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">My Restaurants</a>
+                        <button onclick="logout()" class="ml-4 px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded-md text-sm font-medium transition duration-300">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
+        <div class="bg-white rounded-lg shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-secondary mb-8">My Restaurants</h2>
+            
+            <div id="restaurantList" class="space-y-6">
+                <!-- Restaurants will be added here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="fixed inset-0 bg-secondary bg-opacity-75 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg shadow-2xl max-w-lg w-full mx-4 transform transition-all duration-300">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-xl font-bold text-secondary">Edit Restaurant</h3>
+                </div>
+                <form id="editForm" class="p-6 space-y-4">
+                    <input type="hidden" id="editId">
+                    
+                    <div>
+                        <label for="editName" class="block text-sm font-medium text-secondary">Restaurant Name</label>
+                        <input type="text" id="editName" required 
+                            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-300">
+                    </div>
+
+                    <div>
+                        <label for="editCuisineType" class="block text-sm font-medium text-secondary">Cuisine Type</label>
+                        <select id="editCuisineType" required 
+                            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-300">
+                            <option value="Italian">Italian</option>
+                            <option value="Chinese">Chinese</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="Mexican">Mexican</option>
+                            <option value="Indian">Indian</option>
+                            <option value="American">American</option>
+                            <option value="Thai">Thai</option>
+                            <option value="Mediterranean">Mediterranean</option>
+                            <option value="French">French</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="editDescription" class="block text-sm font-medium text-secondary">Description</label>
+                        <textarea id="editDescription" required rows="4" 
+                            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-300"></textarea>
+                    </div>
+
+                    <div>
+                        <label for="editAddress" class="block text-sm font-medium text-secondary">Address</label>
+                        <input type="text" id="editAddress" required 
+                            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-300">
+                    </div>
+
+                    <div>
+                        <label for="editContactNumber" class="block text-sm font-medium text-secondary">Contact Number</label>
+                        <input type="tel" id="editContactNumber" required 
+                            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-300">
+                    </div>
+
+                    <div>
+                        <label for="editRating" class="block text-sm font-medium text-secondary">Rating (1-5)</label>
+                        <input type="number" id="editRating" min="1" max="5" step="0.5" required 
+                            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-300">
+                    </div>
+
+                    <div class="mt-6 flex justify-end space-x-3">
+                        <button type="button" onclick="closeEditModal()" 
+                            class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-300">
+                            Cancel
+                        </button>
+                        <button type="submit" 
+                            class="px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-300">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRestaurants = []; // Store fetched restaurants
+
+        // Fetch restaurants owned by the user
+        async function fetchMyRestaurants(userId) {
+            const listElement = document.getElementById('restaurantList');
+            const loadingState = document.getElementById('loadingState');
+            
+            try {
+                const response = await fetch(`../backend/get_my_restaurants.php?user_id=${userId}`, {
+                    credentials: 'include' // Include cookies for session context if needed
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                currentRestaurants = data.restaurants || [];
+                displayMyRestaurants(currentRestaurants);
+                
+            } catch (error) {
+                console.error('Error fetching my restaurants:', error);
+                listElement.innerHTML = `<div class="col-span-full text-center py-8"><p class="text-red-500">Error loading your restaurants: ${error.message}</p></div>`;
+            } finally {
+                loadingState.classList.add('hidden');
+            }
+        }
+
+        // Display the restaurants
+        function displayMyRestaurants(restaurants) {
+            const listElement = document.getElementById('restaurantList');
+            listElement.innerHTML = ''; // Clear previous content
+
+            if (restaurants.length === 0) {
+                listElement.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <p class="text-gray-500 text-lg">You haven't added any restaurants yet.</p>
+                        <a href="add-restaurant.html" class="mt-4 inline-block px-6 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition duration-300">
+                            Add Your First Restaurant
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            restaurants.forEach(restaurant => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300';
+                card.onclick = (e) => {
+                    // Prevent navigation if clicking on edit or delete buttons
+                    if (e.target.closest('button')) {
+                        return;
+                    }
+                    window.location.href = `restaurant-detail.html?id=${restaurant.id}`;
+                };
+                
+                const primaryPhoto = restaurant.photos && restaurant.photos.length > 0 ? 
+                    restaurant.photos.find(photo => photo.is_primary === "1" || photo.is_primary === true)?.photo_url : null;
+                const defaultImage = 'assets/images/default-restaurant.jpg';
+
+                card.innerHTML = `
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="${primaryPhoto ? '../' + primaryPhoto : defaultImage}" alt="${restaurant.name}" 
+                             class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium">
+                                ${restaurant.rating.toFixed(1)} <i class="fas fa-star text-yellow-300"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">${restaurant.name}</h3>
+                        <div class="space-y-2 mb-4">
+                            <p class="text-gray-600"><i class="fas fa-utensils w-6"></i> ${restaurant.cuisine_type}</p>
+                            <p class="text-gray-600 line-clamp-2"><i class="fas fa-map-marker-alt w-6"></i> ${restaurant.address}</p>
+                            <p class="text-gray-600"><i class="fas fa-phone w-6"></i> ${restaurant.contact_number}</p>
+                        </div>
+                        <div class="flex justify-end space-x-2">
+                            <button onclick="openEditModal(${restaurant.id})" 
+                                class="w-10 h-10 flex items-center justify-center text-primary hover:bg-primary/10 rounded-full transition-colors duration-300">
+                                <i class="fas fa-edit text-lg"></i>
+                            </button>
+                            <button onclick="deleteRestaurant(${restaurant.id})" 
+                                class="w-10 h-10 flex items-center justify-center text-primary hover:bg-primary/10 rounded-full transition-colors duration-300">
+                                <i class="fas fa-trash-alt text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                listElement.appendChild(card);
+            });
+        }
+
+        // Edit modal functions
+        function openEditModal(restaurantId) {
+            const restaurant = currentRestaurants.find(r => r.id === restaurantId);
+            if (!restaurant) return;
+
+            document.getElementById('editId').value = restaurant.id;
+            document.getElementById('editName').value = restaurant.name;
+            document.getElementById('editCuisineType').value = restaurant.cuisine_type;
+            document.getElementById('editDescription').value = restaurant.description;
+            document.getElementById('editAddress').value = restaurant.address;
+            document.getElementById('editContactNumber').value = restaurant.contact_number;
+            document.getElementById('editRating').value = restaurant.rating;
+            
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
+        // Handle edit form submission
+        document.getElementById('editForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                id: document.getElementById('editId').value,
+                name: document.getElementById('editName').value.trim(),
+                cuisine_type: document.getElementById('editCuisineType').value,
+                description: document.getElementById('editDescription').value.trim(),
+                address: document.getElementById('editAddress').value.trim(),
+                contact_number: document.getElementById('editContactNumber').value.trim(),
+                rating: parseFloat(document.getElementById('editRating').value),
+                user_id: localStorage.getItem('user_id')
+            };
+            
+            try {
+                const response = await fetch('../backend/update_restaurant.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to update restaurant');
+                }
+                
+                closeEditModal();
+                fetchMyRestaurants(localStorage.getItem('user_id'));
+                
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        // Delete restaurant
+        async function deleteRestaurant(id) {
+            if (!confirm('Are you sure you want to delete this restaurant?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('../backend/delete_restaurant.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id, user_id: localStorage.getItem('user_id') }),
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to delete restaurant');
+                }
+                
+                fetchMyRestaurants(localStorage.getItem('user_id'));
+                
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Initial load
+        fetchMyRestaurants(localStorage.getItem('user_id'));
+    </script>
+</body>
+</html> 

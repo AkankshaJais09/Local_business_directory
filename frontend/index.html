@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodHub - Find Great Places to Eat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#903C1F',
+                        secondary: '#000000',
+                        light: '#FFFFFF'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="index.html" class="text-2xl font-bold text-primary hover:text-secondary transition duration-300">FoodHub</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="hidden md:ml-6 md:flex md:space-x-8" id="nav-links">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="relative">
+        <div class="absolute inset-0">
+            <div class="w-full h-full bg-cover bg-center blur-sm" style="background-image: url('bbgjpg.jpg');"></div>
+            <div class="absolute inset-0 bg-black bg-opacity-50"></div> <!-- Dark overlay -->
+        </div>
+        <div class="relative max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 z-10">
+            <div class="text-center">
+                <h1 class="text-4xl font-extrabold text-white sm:text-5xl sm:tracking-tight lg:text-6xl">
+                    Find the best local restaurants near you
+                </h1>
+                <p class="mt-6 max-w-2xl mx-auto text-xl text-white/90">
+                    Discover amazing places to eat, read reviews, and share your experiences.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
+        <div class="bg-white rounded-lg shadow-xl p-6 transform transition-all duration-300 hover:shadow-2xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="cuisineFilter" class="block text-sm font-medium text-secondary">Cuisine Type</label>
+                    <select id="cuisineFilter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary rounded-md">
+                        <option value="">All Cuisines</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="locationFilter" class="block text-sm font-medium text-secondary">Location</label>
+                    <input type="text" id="locationFilter" placeholder="Enter location..." class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary rounded-md">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
+
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold text-secondary mb-8 text-center">Top Rated Restaurants</h2>
+            <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3" id="topRestaurantList">
+
+            </div>
+        </div>
+        <div class="relative min-h-[500px] bg-cover bg-center bg-fixed rounded-xl overflow-hidden mb-12" style="background-image: url('abc.jpg');">
+            <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+            <div class="relative px-4 sm:px-6 lg:px-8 py-20 z-10">
+                <div class="grid md:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
+                    <div class="text-white">
+                        <h2 class="text-4xl font-bold mb-6">Discover Culinary Excellence</h2>
+                        <p class="text-xl mb-8 text-gray-200">
+                            Embark on a gastronomic journey through our carefully selected restaurants. From local favorites to fine dining establishments, find your next memorable dining experience.
+                        </p>
+                        <div class="flex flex-wrap gap-6">
+                            <div class="flex items-center">
+                                <i class="fas fa-utensils text-primary text-2xl mr-3"></i>
+                                <span class="text-lg">Curated Selection</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-primary text-2xl mr-3"></i>
+                                <span class="text-lg">Top Rated</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-clock text-primary text-2xl mr-3"></i>
+                                <span class="text-lg">Quick Booking</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm p-8 rounded-xl">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="text-center p-4 bg-white/10 rounded-lg">
+                                <span class="text-4xl font-bold text-primary">500+</span>
+                                <p class="text-white mt-2">Restaurants</p>
+                            </div>
+                            <div class="text-center p-4 bg-white/10 rounded-lg">
+                                <span class="text-4xl font-bold text-primary">10k+</span>
+                                <p class="text-white mt-2">Happy Customers</p>
+                            </div>
+                            <div class="text-center p-4 bg-white/10 rounded-lg">
+                                <span class="text-4xl font-bold text-primary">50+</span>
+                                <p class="text-white mt-2">Cuisines</p>
+                            </div>
+                            <div class="text-center p-4 bg-white/10 rounded-lg">
+                                <span class="text-4xl font-bold text-primary">4.8</span>
+                                <p class="text-white mt-2">Avg. Rating</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 class="text-4xl font-bold text-secondary mb-10 text-center">All Restaurants</h2>
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3" id="restaurantList">
+           
+        </div>
+    </div>
+    <footer class="bg-gradient-to-b from-gray-900 to-gray-800 text-white mt-20">
+
+        <div class="relative py-8">
+            <div class="absolute inset-0 flex items-center px-8">
+                <div class="w-full border-t-2 border-gray-800"></div>
+            </div>
+            <div class="relative flex justify-center">
+                <span class="bg-gradient-to-b from-gray-900 to-gray-800 px-4">
+                    <i class="fas fa-utensils text-2xl text-primary"></i>
+                </span>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+               
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center mb-6">
+                        <h3 class="text-3xl font-bold">
+                            <span class="text-primary">Food</span>
+                            <span class="text-white">Hub</span>
+                        </h3>
+                    </div>
+                    <p class="text-gray-400 mb-8 max-w-md leading-relaxed">
+                        Discover the best local restaurants in your area. From fine dining to casual eateries, 
+                        we help you find the perfect place for every occasion.
+                    </p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="bg-gray-800 hover:bg-primary text-white p-3 rounded-full transition-all duration-300 hover:scale-110">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-primary text-white p-3 rounded-full transition-all duration-300 hover:scale-110">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-primary text-white p-3 rounded-full transition-all duration-300 hover:scale-110">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-primary text-white p-3 rounded-full transition-all duration-300 hover:scale-110">
+                            <i class="fab fa-pinterest"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6 flex items-center">
+                        <span class="bg-primary/20 p-2 rounded-lg mr-2">
+                            <i class="fas fa-link text-primary"></i>
+                        </span>
+                        Quick Links
+                    </h4>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="index.html" class="text-gray-400 hover:text-primary transition-colors flex items-center">
+                                <i class="fas fa-chevron-right mr-2 text-xs text-primary"></i>
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="about.html" class="text-gray-400 hover:text-primary transition-colors flex items-center">
+                                <i class="fas fa-chevron-right mr-2 text-xs text-primary"></i>
+                                About Us
+                            </a>
+                        </li>
+                        <li>
+                            <a href="add-restaurant.html" class="text-gray-400 hover:text-primary transition-colors flex items-center">
+                                <i class="fas fa-chevron-right mr-2 text-xs text-primary"></i>
+                                Add Restaurant
+                            </a>
+                        </li>
+                        <li>
+                            <a href="my-restaurants.html" class="text-gray-400 hover:text-primary transition-colors flex items-center">
+                                <i class="fas fa-chevron-right mr-2 text-xs text-primary"></i>
+                                My Restaurants
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6 flex items-center">
+                        <span class="bg-primary/20 p-2 rounded-lg mr-2">
+                            <i class="fas fa-phone text-primary"></i>
+                        </span>
+                        Contact Us
+                    </h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-center text-gray-400 hover:text-gray-300 transition-colors group">
+                            <span class="bg-gray-800 p-2 rounded-lg mr-3 group-hover:bg-primary/20 transition-colors">
+                                <i class="fas fa-map-marker-alt text-primary"></i>
+                            </span>
+                            123 Food Street, Cuisine City
+                        </li>
+                        <li class="flex items-center text-gray-400 hover:text-gray-300 transition-colors group">
+                            <span class="bg-gray-800 p-2 rounded-lg mr-3 group-hover:bg-primary/20 transition-colors">
+                                <i class="fas fa-phone text-primary"></i>
+                            </span>
+                            +1 234 567 890
+                        </li>
+                        <li class="flex items-center text-gray-400 hover:text-gray-300 transition-colors group">
+                            <span class="bg-gray-800 p-2 rounded-lg mr-3 group-hover:bg-primary/20 transition-colors">
+                                <i class="fas fa-envelope text-primary"></i>
+                            </span>
+                            info@foodhub.com
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="md:flex md:items-center md:justify-between">
+                    <div class="text-sm text-gray-400">
+                        © 2024 <span class="text-primary font-semibold">FoodHub</span>. All rights reserved.
+                    </div>
+                    <div class="mt-4 md:mt-0">
+                        <ul class="flex flex-wrap gap-6 text-sm text-gray-400">
+                            <li>
+                                <a href="#" class="hover:text-primary transition-colors flex items-center">
+                                    <i class="fas fa-shield-alt mr-2"></i>
+                                    Privacy Policy
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:text-primary transition-colors flex items-center">
+                                    <i class="fas fa-file-contract mr-2"></i>
+                                    Terms of Service
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:text-primary transition-colors flex items-center">
+                                    <i class="fas fa-cookie mr-2"></i>
+                                    Cookie Policy
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userId = localStorage.getItem('user_id');
+            const email = localStorage.getItem('email');
+            
+            if (!userId || !email) {
+                window.location.href = 'login.html';
+                return;
+            }
+            const userFullName = localStorage.getItem('full_name');
+            if (userFullName) {
+                const userNameElement = document.getElementById('userName');
+                if (userNameElement) {
+                    userNameElement.textContent = userFullName;
+                }
+            }
+        });
+        function logout() {
+
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('email');
+            localStorage.removeItem('full_name');
+            
+            window.location.href = 'login.html';
+        }
+        const navLinks = document.getElementById('nav-links');
+        navLinks.innerHTML = `
+            <a href="index.html" class="border-primary text-secondary hover:text-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">Home</a>
+            <a href="about.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">About</a>
+            <a href="add-restaurant.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">Add Restaurant</a>
+            <a href="my-restaurants.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">My Restaurants</a>
+            <button onclick="logout()" class="ml-4 px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded-md text-sm font-medium transition duration-300">Logout</button>
+        `;
+        let allRestaurants = [];
+        async function fetchRestaurants() {
+            try {
+                const response = await fetch('../backend/get_restaurants.php');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch restaurants');
+                }
+                
+                const data = await response.json();
+                if (!data.restaurants) {
+                    throw new Error('No restaurants data received');
+                }
+
+                allRestaurants = data.restaurants;
+                console.log('Fetched restaurants:', allRestaurants);
+                const cuisines = [...new Set(allRestaurants.map(restaurant => restaurant.cuisine_type))];
+                const cuisineFilter = document.getElementById('cuisineFilter');
+                cuisineFilter.innerHTML = '<option value="">All Cuisines</option>';
+                cuisines.forEach(cuisine => {
+                    const option = document.createElement('option');
+                    option.value = cuisine;
+                    option.textContent = cuisine;
+                    cuisineFilter.appendChild(option);
+                });
+
+                displayRestaurants(allRestaurants);
+            } catch (error) {
+                console.error('Error fetching restaurants:', error);
+                const restaurantList = document.getElementById('restaurantList');
+                restaurantList.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <p class="text-red-500">Error loading restaurants. Please try again later.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayRestaurants(restaurants) {
+            const restaurantList = document.getElementById('restaurantList');
+            const topRestaurantList = document.getElementById('topRestaurantList');
+            
+            restaurantList.innerHTML = '';
+            topRestaurantList.innerHTML = '';
+
+            if (!restaurants || restaurants.length === 0) {
+                restaurantList.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <p class="text-gray-500 text-lg">No restaurants found.</p>
+                    </div>
+                `;
+                return;
+            }
+            const topRestaurantIds = [53, 54, 55, 56, 57, 58];
+            const topRestaurants = restaurants.filter(r => topRestaurantIds.includes(parseInt(r.id)));
+            const otherRestaurants = restaurants.filter(r => !topRestaurantIds.includes(parseInt(r.id)));
+
+          
+            if (topRestaurants.length > 0) {
+                topRestaurants.forEach(restaurant => {
+                    const card = createRestaurantCard(restaurant);
+                    topRestaurantList.appendChild(card);
+                });
+            }
+            const allRestaurants = [...restaurants];
+            allRestaurants.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
+            
+            allRestaurants.forEach(restaurant => {
+                const card = createRestaurantCard(restaurant);
+                restaurantList.appendChild(card);
+            });
+        }
+        function createRestaurantCard(restaurant) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-2xl shadow-md overflow-hidden transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 group cursor-pointer';
+            card.onclick = () => window.location.href = `restaurant-detail.html?id=${restaurant.id}`;
+            
+            const primaryPhoto = restaurant.photos && restaurant.photos.length > 0 ? 
+                restaurant.photos.find(photo => photo.is_primary === "1" || photo.is_primary === true)?.photo_url : null;
+            const defaultImage = 'assets/images/default-restaurant.jpg';
+
+            card.innerHTML = `
+                <div class="aspect-w-16 aspect-h-9 relative overflow-hidden">
+                    <img src="${primaryPhoto ? '../' + primaryPhoto : defaultImage}" 
+                         alt="${restaurant.name}" 
+                         class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 group-hover:from-black/20 group-hover:via-black/20 group-hover:to-black/60 transition-all duration-300"></div>
+                    <div class="absolute top-4 left-4 transform transition-transform duration-300 group-hover:-translate-y-1">
+                        <span class="inline-flex items-center px-3 py-1.5 bg-primary/90 backdrop-blur-sm rounded-lg text-white text-sm font-medium group-hover:bg-primary">
+                            ${restaurant.cuisine_type}
+                        </span>
+                    </div>
+                    <div class="absolute top-4 right-4 transform transition-transform duration-300 group-hover:-translate-y-1">
+                        <div class="flex items-center bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 group-hover:bg-white">
+                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                            <span class="font-bold text-gray-800">${restaurant.rating.toFixed(1)}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-6 relative">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-300">
+                            ${restaurant.name}
+                        </h3>
+                    </div>
+                    
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2 group-hover:text-gray-900 transition-colors duration-300">
+                        ${restaurant.description}
+                    </p>
+                    
+                    <div class="flex items-center justify-between text-sm">
+                        <div class="flex items-center text-gray-500 group-hover:text-gray-700 transition-colors duration-300">
+                            <i class="fas fa-map-marker-alt text-primary mr-2 group-hover:scale-110 transition-transform duration-300"></i>
+                            <span class="line-clamp-1 max-w-[200px]">${restaurant.address}</span>
+                        </div>
+                        <button class="inline-flex items-center text-primary font-medium group-hover:translate-x-1 transition-all duration-300">
+                            Details
+                            <i class="fas fa-chevron-right ml-2 text-xs group-hover:ml-3 transition-all duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        function generateStarRating(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<i class="fas fa-star"></i>';
+                } else if (i - 0.5 <= rating) {
+                    stars += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    stars += '<i class="far fa-star"></i>';
+                }
+            }
+            return stars;
+        }
+
+        function filterRestaurants() {
+            const cuisine = document.getElementById('cuisineFilter').value.toLowerCase();
+            const location = document.getElementById('locationFilter').value.toLowerCase();
+            
+            const filteredRestaurants = allRestaurants.filter(restaurant => {
+                const matchesCuisine = !cuisine || restaurant.cuisine_type.toLowerCase() === cuisine;
+                const matchesLocation = !location || restaurant.address.toLowerCase().includes(location);
+                return matchesCuisine && matchesLocation;
+            });
+            
+            displayRestaurants(filteredRestaurants);
+        }
+        document.getElementById('cuisineFilter').addEventListener('change', filterRestaurants);
+        document.getElementById('locationFilter').addEventListener('input', filterRestaurants);
+
+        fetchRestaurants();
+    </script>
+</body>
+</html> 

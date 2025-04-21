@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Restaurant - FoodHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#903C1F',
+                        secondary: '#000000',
+                        light: '#FFFFFF'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-light">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userId = localStorage.getItem('user_id');
+            const email = localStorage.getItem('email');
+            
+            if (!userId || !email) {
+                window.location.href = 'login.html';
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('email');
+            localStorage.removeItem('full_name');
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="index.html" class="text-2xl font-bold text-primary hover:text-secondary transition duration-300">FoodHub</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="hidden md:ml-6 md:flex md:space-x-8" id="nav-links">
+                        <a href="index.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">Home</a>
+                        <a href="about.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">About</a>
+                        <a href="add-restaurant.html" class="border-primary text-secondary hover:text-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">Add Restaurant</a>
+                        <a href="my-restaurants.html" class="border-transparent text-secondary hover:text-primary hover:border-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-300">My Restaurants</a>
+                        <button onclick="logout()" class="ml-4 px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded-md text-sm font-medium transition duration-300">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Add Restaurant Form -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
+        <div class="bg-white rounded-lg shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-secondary mb-8">Add New Restaurant</h2>
+            
+            <form id="addRestaurantForm" class="space-y-6">
+                <!-- Restaurant Name -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-secondary">Restaurant Name</label>
+                    <input type="text" id="name" name="name" required
+                        class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-300">
+                </div>
+
+                <!-- Cuisine Type -->
+                <div>
+                    <label for="cuisineType" class="block text-sm font-medium text-secondary">Cuisine Type</label>
+                    <select id="cuisineType" name="cuisineType" required
+                        class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-300">
+                        <option value="">Select Cuisine Type</option>
+                        <option value="Italian">Italian</option>
+                        <option value="Chinese">Chinese</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Mexican">Mexican</option>
+                        <option value="Indian">Indian</option>
+                        <option value="American">American</option>
+                        <option value="Thai">Thai</option>
+                        <option value="Mediterranean">Mediterranean</option>
+                        <option value="French">French</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label for="description" class="block text-sm font-medium text-secondary">Description</label>
+                    <textarea id="description" name="description" rows="4" required
+                        class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-300"></textarea>
+                </div>
+
+                <!-- Address -->
+                <div>
+                    <label for="address" class="block text-sm font-medium text-secondary">Address</label>
+                    <input type="text" id="address" name="address" required
+                        class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-300">
+                </div>
+
+                <!-- Contact Number -->
+                <div>
+                    <label for="contactNumber" class="block text-sm font-medium text-secondary">Contact Number</label>
+                    <input type="tel" id="contactNumber" name="contactNumber" required
+                        class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-300">
+                </div>
+
+                <!-- Rating -->
+                <div>
+                    <label for="rating" class="block text-sm font-medium text-secondary">Rating (1-5)</label>
+                    <input type="number" id="rating" name="rating" min="1" max="5" step="0.5" required
+                        class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-300">
+                </div>
+
+                <!-- Photos -->
+                <div>
+                    <label class="block text-sm font-medium text-secondary">Restaurant Photos</label>
+                    <div class="mt-1 flex flex-col space-y-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1">
+                                <label class="block text-xs text-gray-600 mb-1">Primary Photo (Main display image)</label>
+                                <input type="file" id="primaryPhoto" accept="image/*"
+                                    class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition duration-300">
+                            </div>
+                            <div id="primaryPhotoPreview" class="w-20 h-20 border rounded-lg overflow-hidden hidden">
+                                <img src="" alt="Primary photo preview" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs text-gray-600 mb-1">Additional Photos (Up to 4)</label>
+                            <input type="file" id="additionalPhotos" accept="image/*" multiple
+                                class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition duration-300">
+                        </div>
+                        <div id="additionalPhotosPreview" class="grid grid-cols-4 gap-2">
+                            <!-- Preview images will be added here -->
+                        </div>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-500">Accepted formats: JPG, PNG. Max file size: 5MB</p>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4">
+                    <button type="submit"
+                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transform transition-all duration-300 hover:scale-[1.02]">
+                        Add Restaurant
+                    </button>
+                </div>
+
+                <!-- Error Message -->
+                <div id="formError" class="text-red-600 text-center hidden"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Handle file inputs
+        document.getElementById('primaryPhoto').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    this.value = '';
+                    return;
+                }
+                
+                const preview = document.getElementById('primaryPhotoPreview');
+                const img = preview.querySelector('img');
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                    preview.classList.remove('hidden');
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('additionalPhotos').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files).slice(0, 4);
+            const previewContainer = document.getElementById('additionalPhotosPreview');
+            previewContainer.innerHTML = '';
+            
+            files.forEach(file => {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Each file size must be less than 5MB');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                const previewDiv = document.createElement('div');
+                previewDiv.className = 'w-full aspect-square border rounded-lg overflow-hidden';
+                const img = document.createElement('img');
+                img.className = 'w-full h-full object-cover';
+                
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                }
+                
+                reader.readAsDataURL(file);
+                previewDiv.appendChild(img);
+                previewContainer.appendChild(previewDiv);
+            });
+        });
+
+        // Handle form submission
+        document.getElementById('addRestaurantForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            
+            // Add restaurant details
+            formData.append('name', document.getElementById('name').value.trim());
+            formData.append('cuisine_type', document.getElementById('cuisineType').value);
+            formData.append('description', document.getElementById('description').value.trim());
+            formData.append('address', document.getElementById('address').value.trim());
+            formData.append('contact_number', document.getElementById('contactNumber').value.trim());
+            formData.append('rating', document.getElementById('rating').value);
+            formData.append('user_id', localStorage.getItem('user_id'));
+            
+            // Add photos
+            const primaryPhoto = document.getElementById('primaryPhoto').files[0];
+            if (primaryPhoto) {
+                formData.append('primary_photo', primaryPhoto);
+            }
+            
+            const additionalPhotos = document.getElementById('additionalPhotos').files;
+            for (let i = 0; i < Math.min(additionalPhotos.length, 4); i++) {
+                formData.append('additional_photos[]', additionalPhotos[i]);
+            }
+            
+            try {
+                const response = await fetch('../backend/add_restaurant.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to add restaurant');
+                }
+                
+                // Redirect to homepage on success
+                window.location.href = 'my-restaurants.html';
+                
+            } catch (error) {
+                const formError = document.getElementById('formError');
+                formError.textContent = error.message;
+                formError.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html> 
